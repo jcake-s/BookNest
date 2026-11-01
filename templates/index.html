@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block main %}
+
+    <h1 class="mb-4">Welcome, {{ session.username }}!</h1>
+
+    {% if current %}
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">The Club Is Reading</div>
+        <div class="card-body">
+            <h4>{{ current.title }}</h4>
+            <p class="text-muted">by {{ current.author }}</p>
+            <a href="/book/{{ current.id }}" class="btn btn-outline-primary">Go to Discussion</a>
+        </div>
+    </div>
+
+    {% endif %}
+
+    <h2>Top Suggestions</h2>
+    <ul class="list-group mb-4">
+
+        {% for b in suggestions %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><strong>{{ b.title }}</strong> by {{ b.author }}</span>
+            <span class="badge bg-primary rounded-pill">{{ b.votes }} votes</span>
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No suggestions yet. <a href="/suggest">Suggest one!</a></li>
+
+        {% endfor %}
+
+    </ul>
+
+    <h2>Recent Discussion</h2>
+    <ul class="list-group">
+
+        {% for d in recent %}
+
+        <li class="list-group-item">
+            <strong><a href="/profile/{{ d.username }}">{{ d.username }}</a></strong> on <em>{{ d.title }}</em>:
+            {{ d.content }}
+            <br><small class="text-muted">{{ d.created_at }}</small>
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No discussions yet.</li>
+
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

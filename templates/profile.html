@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ profile_user.username }}'s Profile{% endblock %}
+
+{% block main %}
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1 class="mb-1">{{ profile_user.username }}</h1>
+            <p class="text-muted mb-0">Member since {{ profile_user.created_at }}</p>
+
+            {% if is_own_profile %}
+
+            <span class="badge bg-info text-dark mt-2">This is you</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="mb-0">{{ stats.suggested }}</h3>
+                    <small class="text-muted">Books Suggested</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="mb-0">{{ stats.voted }}</h3>
+                    <small class="text-muted">Votes Cast</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="mb-0">{{ stats.messages }}</h3>
+                    <small class="text-muted">Messages Posted</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Books Suggested</h2>
+    <ul class="list-group mb-4">
+
+        {% for b in suggested %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong><a href="/book/{{ b.id }}">{{ b.title }}</a></strong>
+                <span class="text-muted">by {{ b.author }}</span>
+                <br>
+                <small class="text-muted">Status: {{ b.status }}</small>
+            </div>
+            <span class="badge bg-primary rounded-pill">{{ b.votes }} votes</span>
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No books suggested yet.</li>
+
+        {% endfor %}
+
+    </ul>
+
+    <h2>Votes Cast</h2>
+    <ul class="list-group mb-4">
+
+        {% for v in voted %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+                <strong><a href="/book/{{ v.id }}">{{ v.title }}</a></strong>
+                <span class="text-muted">by {{ v.author }}</span>
+            </span>
+            <small class="text-muted">{{ v.created_at }}</small>
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No votes yet.</li>
+
+        {% endfor %}
+
+    </ul>
+
+    <h2>Messages Posted</h2>
+    <ul class="list-group">
+
+        {% for m in messages %}
+
+        <li class="list-group-item">
+            on <strong><a href="/book/{{ m.book_id }}">{{ m.title }}</a></strong>
+            <small class="text-muted">{{ m.created_at }}</small>
+            <br>
+            {{ m.content }}
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No messages yet.</li>
+
+        {% endfor %}
+        
+    </ul>
+
+{% endblock %}

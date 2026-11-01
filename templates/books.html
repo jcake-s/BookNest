@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}Books{% endblock %}
+
+{% block main %}
+
+    <h1 class="mb-4">All Books</h1>
+
+    <ul class="list-group">
+
+        {% for b in books %}
+
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong><a href="/book/{{ b.id }}">{{ b.title }}</a></strong>
+                <span class="text-muted">by {{ b.author }}</span>
+                <br>
+                <small class="text-muted">
+                    Suggested by <a href="/profile/{{ b.suggester }}">{{ b.suggester }}</a> · Status:
+
+                    {% if b.status == 'finished' %}
+
+                        <span class="text-success">Finished</span>
+
+                    {% elif b.status == 'reading' %}
+
+                        <span class="text-warning">Reading</span>
+
+                    {% else %}
+                        {{ b.status }}
+                    {% endif %}
+                </small>
+            </div>
+            <div>
+                <span class="badge bg-primary rounded-pill me-2">{{ b.votes }} votes</span>
+                <form action="/vote/{{ b.id }}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Vote / Unvote</button>
+                </form>
+
+                {% if b.suggested_by == session.user_id and b.status != 'reading' %}
+
+                <form action="/delete/{{ b.id }}" method="post" class="d-inline" onsubmit="return confirm('Delete this book and all its votes/discussions?');">
+                    <button class="btn btn-sm btm-outline-danger" type="submit">Delete</button>
+                </form>
+
+                {% endif %}
+
+            </div>
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No books yet. <a href="/suggest">Suggest one!</a></li>
+
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

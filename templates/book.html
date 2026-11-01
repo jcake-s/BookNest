@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block main %}
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1>{{ book.title }}</h1>
+            <p class="text-muted">by {{ book.author }}</p>
+            <p>{{ book.description }}</p>
+            <p><strong>Status:</strong> {{ book.status }}</p>
+
+            {% if book.status == 'suggested' %}
+
+            <form action="/mark-reading/{{ book.id }}" method="post" class="d-inline">
+                <button class="btn btn-success" type="submit">Mark as Currently Reading</button>
+            </form>
+
+            {% elif book.status == 'reading' %}
+
+            <form action="/mark-finished/{{ book.id }}" method="post" class="d-inline">
+                <button class="btn btn-warning" type="submit">Mark as Finished</button>
+            </form>
+
+            {% endif %}
+
+            {% if book.suggested_by == session.user_id and book.status != 'reading' %}
+
+            <form action="/delete/{{ book.id }}" method="post" class="d-inline" onsubmit="return confirm('Delete this book and all its votes/discussions?');">
+                <button class="btn btn-danger" type="submit">Delete Book</button>
+            </form>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <h2>Discussion</h2>
+    <form action="/discuss/{{ book.id }}" method="post" class="mb-4">
+        <div class="mb-3">
+            <textarea class="form-control" name="content" rows="3" placeholder="Share your thoughts..."></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Post</button>
+    </form>
+
+    <ul class="list-group">
+
+        {% for d in discussions %}
+
+        <li class="list-group-item">
+            <strong><a href="/profile/{{ d.username }}">{{ d.username }}</a></strong> <small class="text-muted">{{ d.created_at }}</small>
+            <br>
+            {{ d.content }}
+        </li>
+
+        {% else %}
+
+        <li class="list-group-item">No messages yet. Be the first!</li>
+
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}
