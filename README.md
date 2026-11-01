@@ -55,10 +55,11 @@ https://www.youtube.com/watch?v=W3yWDebGyCs
 # How to Run
 1. Install the dependencies:
     pip install --user -r requirements.txt
-2. Start the Flask development server:
+2. Initialize the database using the provided schema:
+    sqlite3 BookNest.db < schema.sql
+3. Start the Flask development server:
     flask run
-3. Open the link shown in the terminal in your browser.
-    The app will create and use booknest.db in the project folder automatically. On first run, you should register a new account through the web interface and there are no pre-seeded users.
+4. Open the link shown in the terminal in your browser.
 
 ---
 
